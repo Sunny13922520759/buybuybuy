@@ -70,18 +70,18 @@
                                         </div>
                                     </td>
                                 </tr>
-                               <!-- 购物车有商品 -->
-                                 <tr v-for="item in messages" :key="item.id" v-show="messages.length!=0">
-                                     <td>
-                                             <el-switch v-model="item.selected" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-                                             </td>
-                                             <td>
-                                                 <img :src="item.img_url" alt="" style="width: 65px;">
-                                                 </td>
-                                                 <td> {{item.title}}</td>
-                                                 <td>{{item.sell_price}}</td>
-                                                 <td>
-                                                     <!-- <div class="el-input-number el-input-number--mini">
+                                <!-- 购物车有商品 -->
+                                <tr v-for="item in messages" :key="item.id" v-show="messages.length!=0">
+                                    <td>
+                                        <el-switch v-model="item.selected" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                                    </td>
+                                    <td>
+                                        <img :src="item.img_url" alt="" style="width: 65px;">
+                                    </td>
+                                    <td> {{item.title}}</td>
+                                    <td>{{item.sell_price}}</td>
+                                    <td>
+                                        <!-- <div class="el-input-number el-input-number--mini">
                                                      <span role="button" class="el-input-number__decrease">
                                                          <i class="el-icon-minus"></i>
                                                          </span>
@@ -92,14 +92,14 @@
                                                                  <input type="text" autocomplete="off" max="Infinity" min="0" role="spinbutton" aria-valuemax="Infinity" aria-valuemin="0" aria-valuenow="7" aria-disabled="undefined" class="el-input__inner">
                                                                  </div>
                                                                  </div> -->
-                                                                   <el-input-number v-model="item.buycount" @change="countChange(item.id,$event)" :min="1"  label="描述文字"></el-input-number>
-                                                                 </td>
-                                                                 <td>{{item.buycount*item.sell_price}}</td>
-                                                                 <td>
-                                                                     <button type="button" class="el-button el-button--danger is-circle" @click="deleteOne(item.id)">
-                                                                         <i class="el-icon-delete"></i></button>
-                                                                         </td>
-                                                                         </tr>
+                                        <el-input-number v-model="item.buycount" @change="countChange(item.id,$event)" :min="1" label="描述文字"></el-input-number>
+                                    </td>
+                                    <td>{{item.buycount*item.sell_price}}</td>
+                                    <td>
+                                        <button type="button" class="el-button el-button--danger is-circle" @click="deleteOne(item.id)">
+                                            <i class="el-icon-delete"></i></button>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <th align="right" colspan="8">
                                         已选择商品
@@ -115,11 +115,11 @@
                     <!--购物车底部-->
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                               <router-link to="/index">
-                            <button class="button">继续购物</button>
-                             </router-link>
-                            <router-link to="/checkOrder">
-                            <button class="submit" >立即结算</button>
+                            <router-link to="/index">
+                                <button class="button">继续购物</button>
+                            </router-link>
+                            <router-link :to="'/checkOrder/'+checkIds">
+                                <button class="submit">立即结算</button>
                             </router-link>
                         </div>
                     </div>
@@ -176,6 +176,20 @@ export default {
 
       return totalPrice;
     },
+    //选中的商品ids
+    checkIds() {
+      let ids = "";
+      this.messages.forEach(v => {
+        if (v.selected == true) {
+          ids += v.id;
+          ids += ",";
+        }
+      });
+
+      ids = ids.slice(0, -1);
+    //   console.log(ids);
+      return ids;
+    },
     //总数量
     totalNum() {
       let totalNum = 0;
@@ -231,6 +245,5 @@ export default {
 </script>
 
 <style>
-
 </style>
 

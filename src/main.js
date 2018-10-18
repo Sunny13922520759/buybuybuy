@@ -5,6 +5,7 @@ import detail from './components/detail.vue'
 import shopCart from './components/shopCart.vue'
 import checkOrder from './components/checkOrder.vue'
 import login from './components/login.vue'
+import payOrder from './components/payOrder.vue'
 Vue.config.productionTip = false
 
 
@@ -49,6 +50,10 @@ Vue.use(VueLazyload, {
 //引入放大镜效果插件
 import ProductZoomer from 'vue-product-zoomer'
 Vue.use(ProductZoomer)
+//引入二维码插件
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously);
+
 
 //引入vuex
 import Vuex from 'vuex'
@@ -114,43 +119,51 @@ Vue.use(VueRouter)
 const routes = [{
     path: "/",
     component: index,
-    meta:{
-      zhName:"首页"
+    meta: {
+      zhName: "首页"
     }
   },
   {
     path: "/index",
     component: index,
-    meta:{
-      zhName:"首页"
+    meta: {
+      zhName: "首页"
     }
   },
   {
     path: "/detail/:goodsid",
     component: detail,
-    meta:{
-      zhName:"商品详情"
+    meta: {
+      zhName: "商品详情"
     }
   },
   {
     path: "/shopCart",
     component: shopCart,
-    meta:{
-      zhName:"购物车"
+    meta: {
+      zhName: "购物车"
     }
   },
   {
-    path: "/checkOrder",
+    path: "/checkOrder/:goodsids",
     component: checkOrder,
-    meta:{
-      zhName:"订单详情"
+    meta: {
+      zhName: "订单详情",
+      checkLogin: true
     }
   },
   {
     path: "/login",
     component: login,
-    meta:{
-      zhName:"登录"
+    meta: {
+      zhName: "登录"
+    }
+  },
+  {
+    path: "/payOrder/:orderid",
+    component: payOrder,
+    meta: {
+      zhName: "支付中心"
     }
   }
 ]
@@ -161,8 +174,8 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // console.log(to);
-  window.document.title=to.meta.zhName
-  if (to.path == "/checkOrder") {
+  window.document.title = to.meta.zhName
+  if (to.meta.checkLogin == true) {
     // 发送请求判断是登录
     axios('site/account/islogin').then(response => {
       // console.log(response);
@@ -180,7 +193,9 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
-
+});
+router.afterEach(() => {
+  window.scroll(0, 0)
 })
 
 new Vue({
